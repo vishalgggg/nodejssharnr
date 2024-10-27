@@ -1,12 +1,11 @@
-const http = require('http');
+
 const fs = require('fs');
 const path = require('path');
 const querystring = require('querystring');
 
 const messagesFile = path.join(__dirname, 'messages.txt');
 
-
-const server = http.createServer((req, res) => {
+const server = (req, res) => {
   if (req.method === 'GET') {
     fs.readFile(messagesFile, (err, data) => {
       if (err) throw err;
@@ -30,22 +29,21 @@ const server = http.createServer((req, res) => {
     let body = '';
     req.on('data', chunk => {
       body += chunk.toString();
+      console.log("cu"+chunk);
     });
+    console.log(body);
     req.on('end', () => {
-      
+      console.log("b"+body);
       const post = querystring.parse(body);
       const newMessage = post.message;
       
       fs.appendFile(messagesFile, newMessage + '\n', err => {
         if (err) throw err;
-        res.writeHead(302, { 'Location': '/m' });
+        res.writeHead(302, { 'Location': '/' });
         
         res.end();
       });
     });
   }
-});
-
-server.listen(4000, () => {
-  console.log('Server is running on port 4000');
-});
+};
+module.exports = {"handler":server,name:"my name is vishal"}
