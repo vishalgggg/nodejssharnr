@@ -5,6 +5,7 @@ const querystring = require('querystring');
 
 const messagesFile = path.join(__dirname, 'messages.txt');
 
+
 const server = http.createServer((req, res) => {
   if (req.method === 'GET') {
     fs.readFile(messagesFile, (err, data) => {
